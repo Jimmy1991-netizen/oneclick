@@ -285,7 +285,7 @@
     // Password validation function
     function validatePassword(callback) {
         const password = prompt("Enter the password to continue:");
-        if (password === '1234@@@') {
+        if (password === '1234') {
             callback(); // Proceed if password is correct
         } else {
             alert("Incorrect password. Action denied.");
@@ -295,10 +295,11 @@
     // Default product data with initial stock quantities
     const defaultProducts = [
         { id: 1, name: 'Table', price: 50, available: 10, image: 'https://via.placeholder.com/200x150?text=Table' },
-        { id: 2, name: 'Chair', price: 30, available: 15, image: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pngitem.com%2Fso%2Fproduct%2F&psig=AOvVaw1QUNhUFWj81K6k8whz6Ks5&ust=1732540304894000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLii4d2F9YkDFQAAAAAdAAAAABAE' },
-        { id: 3, name: 'Bed', price: 100, available: 5, image: 'https://png.pngitem.com/pimgs/s/43-434027_product-beauty-skin-care-personal-care-liquid-tree.png' },
-        { id: 4, name: 'Lamp', price: 20, available: 20, image: bio.png },
-        { id: 5, name: 'Cup', price: 10, available: 50, image: 'https://via.placeholder.com/200x150?text=Cup' }
+        { id: 2, name: 'Chair', price: 30, available: 15, image: 'https://via.placeholder.com/200x150?text=Chair' },
+        { id: 3, name: 'Bed', price: 100, available: 5, image: 'https://via.placeholder.com/200x150?text=Bed' },
+        { id: 4, name: 'Lamp', price: 20, available: 20, image: 'https://via.placeholder.com/200x150?text=Lamp' },
+        { id: 5, name: 'Cup', price: 10, available: 50, image: 'https://via.placeholder.com/200x150?text=Cup' },
+        { id: 6, name: 'Cup Cake', price: 10, available: 50, image: 'https://via.placeholder.com/200x150?text=Cup' }
     ];
 
     // Load products from localStorage (or default if not found)
