@@ -53,6 +53,7 @@
             padding: 10px 15px;
             cursor: pointer;
             border-radius: 5px;
+            margin: 5px 0;
         }
         .product button:hover {
             background-color: #0056b3;
@@ -105,7 +106,8 @@
             <p>₱20.00</p>
             <p>Stock: <span id="stock-product-1">10</span></p>
             <input type="number" id="qty-product-1" min="1" max="10" value="1">
-            <button onclick="addToCart('Product 1', 20, 1)">Add to Cart</button>
+            <button id="btn-product-1" onclick="addToCart('Product 1', 20, 1)">Add to Cart</button>
+            <button id="cancel-product-1" onclick="cancelFromCart(1)" disabled>Cancel</button>
         </div>
         <!-- Product 2 -->
         <div class="product">
@@ -114,16 +116,18 @@
             <p>₱35.00</p>
             <p>Stock: <span id="stock-product-2">15</span></p>
             <input type="number" id="qty-product-2" min="1" max="15" value="1">
-            <button onclick="addToCart('Product 2', 35, 2)">Add to Cart</button>
+            <button id="btn-product-2" onclick="addToCart('Product 2', 35, 2)">Add to Cart</button>
+            <button id="cancel-product-2" onclick="cancelFromCart(2)" disabled>Cancel</button>
         </div>
         <!-- Product 3 -->
         <div class="product">
-            <img src="bio.png" alt="Product 3">
+            <img src="images/hazard.jpg" alt="Product 3">
             <h3>Product 3</h3>
             <p>₱50.00</p>
             <p>Stock: <span id="stock-product-3">8</span></p>
             <input type="number" id="qty-product-3" min="1" max="8" value="1">
-            <button onclick="addToCart('Product 3', 50, 3)">Add to Cart</button>
+            <button id="btn-product-3" onclick="addToCart('Product 3', 50, 3)">Add to Cart</button>
+            <button id="cancel-product-3" onclick="cancelFromCart(3)" disabled>Cancel</button>
         </div>
     </div>
     <div class="cart">
@@ -142,14 +146,42 @@
         function addToCart(productName, price, productId) {
             const qtyInput = document.getElementById(`qty-product-${productId}`);
             const qty = parseInt(qtyInput.value);
+            const addToCartButton = document.getElementById(`btn-product-${productId}`);
+            const cancelButton = document.getElementById(`cancel-product-${productId}`);
+
             if (stocks[productId] >= qty) {
                 stocks[productId] -= qty; // Deduct stock
-                cart.push({ name: productName,perprice:price, price: price * qty, qty: qty });
+                cart.push({ id: productId, name: productName, perprice: price, price: price * qty, qty: qty });
                 totalPrice += price * qty;
+
                 updateStockUI(productId);
                 updateCartUI();
+
+                addToCartButton.disabled = true;
+                cancelButton.disabled = false; // Enable cancel button
             } else {
                 alert('Not enough stock available!');
+            }
+        }
+
+        function cancelFromCart(productId) {
+            const cancelButton = document.getElementById(`cancel-product-${productId}`);
+            const addToCartButton = document.getElementById(`btn-product-${productId}`);
+
+            // Find and remove the product from the cart
+            const productIndex = cart.findIndex(item => item.id === productId);
+            if (productIndex !== -1) {
+                const product = cart[productIndex];
+                stocks[productId] += product.qty; // Restore stock
+                totalPrice -= product.price;
+
+                cart.splice(productIndex, 1); // Remove product from cart
+
+                updateStockUI(productId);
+                updateCartUI();
+
+                addToCartButton.disabled = false; // Re-enable Add to Cart button
+                cancelButton.disabled = true; // Disable Cancel button
             }
         }
 
@@ -162,7 +194,7 @@
             cartList.innerHTML = ''; // Clear existing items
             cart.forEach(item => {
                 const li = document.createElement('li');
-                li.textContent = `${item.name}- ₱${item.perprice} (x${item.qty}) - ₱${item.price.toFixed(2)}`;
+                li.textContent = `${item.name} - ₱${item.perprice} (x${item.qty}) - ₱${item.price.toFixed(2)}`;
                 cartList.appendChild(li);
             });
             document.getElementById('total-price').textContent = `Total: ₱${totalPrice.toFixed(2)}`;
@@ -177,6 +209,12 @@
             cart = [];
             totalPrice = 0;
             updateCartUI();
+
+            // Re-enable all Add to Cart buttons and disable all Cancel buttons
+            for (let productId in stocks) {
+                document.getElementById(`btn-product-${productId}`).disabled = false;
+                document.getElementById(`cancel-product-${productId}`).disabled = true;
+            }
         }
     </script>
 </body>
