@@ -3,219 +3,844 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Store</title>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
             text-align: center;
+            margin: 20px;
+            background-color: #f4f4f9;
         }
-        .container {
+        h1 {
+            color: #333;
+        }
+        .product-list {
             display: flex;
+            justify-content: center;
+            gap: 5px;
             flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 0;
         }
         .product {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            background-color: #fff;
+            padding: 5px;
+            border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin: 10px;
+            width: 150px;
             text-align: center;
-            width: 200px;
-            padding: 10px;
         }
-        .product img {
-            max-width: 100%;
+       .product img {
+            width: 100%;
             height: 150px;
-            border-radius: 5px;
+            border-radius: 8px;
+            cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+            transition: transform 0.3s ease-in-out; /* Smooth transition for zoom effect */
         }
-        .product h3 {
-            font-size: 20px;
-            margin: 10px 0;
+        .product img.enlarged {
+            transform: scale(2); /* Enlarge the image */
+	    position:center;
         }
-        .product p {
-            color: #666;
-            font-size: 16px;
-        }
-        .product button {
-            background-color: #007BFF;
-            border: none;
+      .product button {
+            background-color: #4CAF50;
             color: white;
-            padding: 10px 15px;
-            cursor: pointer;
+            padding: 5px;
+            border: none;
             border-radius: 5px;
-            margin: 5px 0;
+            cursor: pointer;
+            font-size: 80%;
+            margin-top: 10px;
+	    width:80%;
         }
         .product button:hover {
-            background-color: #0056b3;
+            background-color: #45a049;
         }
-        .cart {
-            margin: 20px;
-            padding: 15px;
-            background: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        .product button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
-        .cart h2 {
-            margin-top: 0;
-        }
-        .cart ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .cart ul li {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-        .checkout-btn {
-            background-color: #28a745;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
+        .product input {
             margin-top: 10px;
-            display: block;
-            width: 100%;
+            padding: 5px;
+            font-size: 16px;
+            width: 60px;
             text-align: center;
         }
-        .checkout-btn:hover {
-            background-color: #218838;
+        .cart {
+            margin-top: 40px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .cart h3 {
+            color: #333;
+        }
+        .cart ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .cart ul li {
+            margin: 10px 0;
+		line-height:1;
+
+        }
+        .cart ul li span {
+            font-weight: bold;
+		
+        }
+        .checkout-button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .checkout-button:hover {
+            background-color: #006f8e;
+        }
+        .add-product-form {
+            margin-top: 40px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .add-product-form input,
+        .add-product-form button {
+            margin-top: 10px;
+            font-size: 16px;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .add-product-form button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        .add-product-form button:hover {
+            background-color: #45a049;
+        }
+	div {
+	    line-height:0;
+	}
+     .buttonko {
+            background-color: orange;
+            color: black;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 80%;
+            margin-top: 10px;
+	    width:100px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Our Online Store</h1>
-    </header>
-    <div class="container">
-        <!-- Product 1 -->
-        <div class="product">
-            <img src="bio.png" alt="Product 1">
-            <h3>Product 1</h3>
-            <p>₱20.00</p>
-            <p>Stock: <span id="stock-product-1">10</span></p>
-            <input type="number" id="qty-product-1" min="1" max="10" value="1">
-            <button id="btn-product-1" onclick="addToCart('Product 1', 20, 1)">Add to Cart</button>
-            <button id="cancel-product-1" onclick="cancelFromCart(1)" disabled>Cancel</button>
-        </div>
-        <!-- Product 2 -->
-        <div class="product">
-            <img src="images/non bio.png" alt="Product 2">
-            <h3>Product 2</h3>
-            <p>₱35.00</p>
-            <p>Stock: <span id="stock-product-2">15</span></p>
-            <input type="number" id="qty-product-2" min="1" max="15" value="1">
-            <button id="btn-product-2" onclick="addToCart('Product 2', 35, 2)">Add to Cart</button>
-            <button id="cancel-product-2" onclick="cancelFromCart(2)" disabled>Cancel</button>
-        </div>
-        <!-- Product 3 -->
-        <div class="product">
-            <img src="images/hazard.jpg" alt="Product 3">
-            <h3>Product 3</h3>
-            <p>₱50.00</p>
-            <p>Stock: <span id="stock-product-3">8</span></p>
-            <input type="number" id="qty-product-3" min="1" max="8" value="1">
-            <button id="btn-product-3" onclick="addToCart('Product 3', 50, 3)">Add to Cart</button>
-            <button id="cancel-product-3" onclick="cancelFromCart(3)" disabled>Cancel</button>
-        </div>
-    </div>
-    <div class="cart">
-        <h2>Shopping Cart</h2>
-        <ul id="cart-list">
-            <!-- Items will be added here -->
-        </ul>
-        <p id="total-price">Total: ₱0.00</p>
-        <button class="checkout-btn" onclick="checkout()">Checkout</button>
-    </div>
-    <script>
-        let cart = [];
-        let totalPrice = 0;
-        let stocks = { 1: 10, 2: 15, 3: 8 }; // Initial stock levels
 
-        function addToCart(productName, price, productId) {
-            const qtyInput = document.getElementById(`qty-product-${productId}`);
-            const qty = parseInt(qtyInput.value);
-            const addToCartButton = document.getElementById(`btn-product-${productId}`);
-            const cancelButton = document.getElementById(`cancel-product-${productId}`);
+<h1><b style="color:red;">One</b> <b style="color:green;">Click</b><b style="color:blue;"> Store</b></h1>
 
-            if (stocks[productId] >= qty) {
-                stocks[productId] -= qty; // Deduct stock
-                cart.push({ id: productId, name: productName, perprice: price, price: price * qty, qty: qty });
-                totalPrice += price * qty;
+<!-- Add Product Form -->
+<div class="add-product-form" id="addproduct" style="display:none">
+    <h3>Add New Product</h3>
+    <input type="text" id="newProductName" placeholder="Product Name" required />
+    <input type="number" id="newProductPrice" placeholder="Price (₱)" required min="0" />
+    <input type="number" id="newProductStock" placeholder="Stock Quantity" required min="0" />
+    <input type="url" id="newProductImage" placeholder="Image URL" required />
+    <button onclick="addNewProduct()">Add Product</button>
+</div>
 
-                updateStockUI(productId);
-                updateCartUI();
+<div id="div1" style="display:none">
+<br><br>
+</div>
 
-                addToCartButton.disabled = true;
-                cancelButton.disabled = false; // Enable cancel button
+<div id="buttonset1" style="display:none">
+<button onclick="addproduct1();">Click to Display Product Form</button>
+
+<div id="div2" style="display:none">
+<br><br>
+</div>
+
+<button onclick="hideform1();hideset1();">Hide the Form</button>
+</div>
+
+<div id="div3" style="display:none">
+<br><br>
+</div>
+
+
+<button onclick="displayset1();">Options</button>
+<br><br>
+<!-- Product List -->
+<div class="product-list" id="productList">
+    <!-- Product items will be added dynamically here -->
+</div>
+
+<!-- Cart -->
+<div class="cart">
+    <h3>Shopping Cart</h3>
+    <ul id="cartList">
+        <!-- Cart items will appear here -->
+    </ul>
+    <br><p><strong>Total: ₱<span id="cartTotal">0.00</span></strong></p>
+	<button class="checkout-button" onclick="checkout()">Checkout</button>
+</div>
+
+
+<!--all forms open-->
+<div id="allforms" style="display:none">
+ <h1>CUSTOMER SERVICE</h1>
+
+<center>
+<!--telegram bot open -->
+<div style="background:yellow;padding:10px;border-radius:10px;width:300px;line-height:1;">
+<p>Order Details</p>
+    <form >
+        <label for="name">Name:</label>
+        <input type="text" id="name2" placeholder="COMPLETE NAME" style="text-transform: uppercase;width:230px;" required><br><br>
+
+ <label for="name">Address:</label>
+        <input type="text" id="address" placeholder="LOCATION" style="text-transform: uppercase;" required><br><br>
+
+        <label for="numberInput12">Mobile No.:</label>
+        <input 
+            type="number" 
+            id="numberInput12" 
+            name="numberInput" 
+            required 
+            oninput="if(this.value.length > 11) this.value = this.value.slice(0, 11);" 
+            placeholder="MOBILE NUMBER"><br><br>
+
+	<label for="numberInput2">Re-Enter No.:</label>
+        <input 
+            type="number" 
+            id="numberInput22" 
+            name="numberInput" 
+            required 
+            oninput="if(this.value.length > 11) this.value = this.value.slice(0, 11);" 
+            placeholder="MOBILE NUMBER"><br><br>
+
+	<label for="numberInput3">Customer Code:</label>
+        <input 
+            type="number" 
+            id="numberInput3" 
+            name="numberInput"
+	    style="width:70px;" 
+            required 
+            oninput="if(this.value.length > 4) this.value = this.value.slice(0, 4);" 
+            placeholder="CODE"><br><br>
+
+        <button id="mybutton" class="buttonko" onclick="sendMessage2(event);">Place Order</button>
+
+	<p id="output2" style="margin-top: 20px; font-weight: bold;"></p>
+    </form>
+</div>
+<!--telegram bot close-->
+<p>Use the Green Form below if you are NEW CUSTOMER to get your Permanent Customer Code.</p>
+<!--telegram bot open 2-->
+<div style="background:green;padding:10px;border-radius:10px;width:300px;line-height:1;color:white;margin-top:30px;">
+<p>Request Permanent Costumer Code</p>
+    <form >
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="COMPLETE NAME" style="text-transform: uppercase;width:230px;" required><br><br>
+
+        <label for="numberInput1">Mobile Number:</label>
+        <input 
+            type="number" 
+            id="numberInput1" 
+            name="numberInput" 
+            required 
+            oninput="if(this.value.length > 11) this.value = this.value.slice(0, 11);" 
+            placeholder="MOBILE NUMBER"><br><br>
+
+	<label for="numberInput2">Verify Number:</label>
+        <input 
+            type="number" 
+            id="numberInput2" 
+            name="numberInput" 
+            required 
+            oninput="if(this.value.length > 11) this.value = this.value.slice(0, 11);" 
+            placeholder="MOBILE NUMBER"><br><br>
+
+        <button id="mybutton2" class="buttonko" onclick="sendMessage(event);">Submit</button>
+
+	<p id="output" style="margin-top: 20px; font-weight: bold;"></p>
+    </form>
+</div>
+<!--telegram bot close 2-->
+</div>
+<!--all forms close-->
+</center>
+
+
+
+
+<script>
+    // Password validation function
+    function validatePassword(callback) {
+        const password = prompt("Enter the password to continue:");
+        if (password === '1234') {
+            callback(); // Proceed if password is correct
+        } else {
+            alert("Incorrect password. Action denied.");
+        }
+    }
+
+    // Default product data with initial stock quantities
+    const defaultProducts = [
+        { id: 1, name: 'Table', price: 50, available: 10, image: 'https://via.placeholder.com/200x150?text=Chair' },
+        { id: 2, name: 'Chair', price: 30, available: 15, image: 'https://via.placeholder.com/200x150?text=Chair' },
+        { id: 3, name: 'Bed', price: 100, available: 5, image: 'https://via.placeholder.com/200x150?text=Bed' },
+        { id: 4, name: 'Lamp', price: 20, available: 20, image: 'https://via.placeholder.com/200x150?text=Lamp' },
+        { id: 5, name: 'Cup', price: 10, available: 50, image: 'https://via.placeholder.com/200x150?text=Cup' }
+    ];
+
+
+
+
+    // Load products from localStorage (or default if not found)
+    function loadProducts() {
+        const storedProducts = localStorage.getItem('products');
+        if (storedProducts) {
+            return JSON.parse(storedProducts); // Return saved products from localStorage
+        } else {
+            saveProducts(defaultProducts); // Save the default products if not found in localStorage
+            return defaultProducts;
+        }
+    }
+
+    // Save products to localStorage to persist stock and price changes
+    function saveProducts(products) {
+        localStorage.setItem('products', JSON.stringify(products));
+    }
+
+    // Render products to the product list
+    function renderProducts() {
+        const productList = document.getElementById('productList');
+        productList.innerHTML = ''; // Clear any existing products
+        const products = loadProducts(); // Get the current products with updated stock and prices
+
+        // Loop through each product and render it
+        products.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.classList.add('product');
+            
+            productDiv.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" id="image-${product.id}" onclick="toggleImageSize(${product.id})">
+                <h4 id="name-${product.id}">${product.name}</h4>
+                <p>₱<span id="price-${product.id}">${product.price}</span>.00</p> 
+		<p><span id="available-${product.id}">${product.available}</span> stocks</p>
+                <input type="number" id="quantity-${product.id}" value="1" min="1" max="${product.available}" />
+                <button id="add-to-cart-${product.id}" onclick="addToCart(${product.id})">Add to Cart</button>
+		<button id="cancel-add-to-cart-${product.id}" onclick="cancelAddToCart(${product.id})">Cancel Add to Cart</button>
+		<button id="edit-data-${product.id}" onclick="toggleEditButtons(${product.id})">Report Product</button>
+                <button id="edit-name-${product.id}" onclick="editName(${product.id})" style="display: none;">Edit Name</button>
+                <button id="edit-stock-${product.id}" onclick="editStock(${product.id})" style="display: none;">Edit Stock</button>
+                <button id="edit-price-${product.id}" onclick="editPrice(${product.id})" style="display: none;">Edit Price</button>
+                <button id="edit-image-${product.id}" onclick="editImage(${product.id})" style="display: none;">Edit Image</button>
+            `;
+            productList.appendChild(productDiv);
+        });
+    }
+
+let previousStock = {};
+
+    // Edit image for a specific product
+    function editImage(productId) {
+        validatePassword(function() {
+            const newImageUrl = prompt("Enter new image URL:");
+            if (newImageUrl !== null && newImageUrl.trim() !== '') {
+                const products = loadProducts();
+                const product = products.find(p => p.id === productId);
+                product.image = newImageUrl.trim();
+                saveProducts(products);
+
+                document.getElementById(`image-${productId}`).src = newImageUrl;
+                alert("Product image updated successfully!");
             } else {
-                alert('Not enough stock available!');
+                alert("Please enter a valid image URL.");
+            }
+        });
+    }
+
+
+ // Toggle the image size (enlarge or return to original size)
+    function toggleImageSize(productId) {
+        const image = document.getElementById(`image-${productId}`);
+        image.classList.toggle('enlarged');  // Toggle 'enlarged' class
+    }
+
+
+
+    // Toggle the visibility of edit buttons for a specific product
+    function toggleEditButtons(productId) {
+        validatePassword(function() {
+        const editButtons = [
+            document.getElementById(`edit-name-${productId}`),
+            document.getElementById(`edit-stock-${productId}`),
+            document.getElementById(`edit-price-${productId}`),
+            document.getElementById(`edit-image-${productId}`)
+        ];
+
+        editButtons.forEach(button => {
+            button.style.display = button.style.display === 'none' ? 'block' : 'none';
+        });
+    });
+    }
+
+ 
+
+
+
+ 
+
+
+    // Edit name for a specific product
+    function editName(productId) {
+        validatePassword(function() {
+            const newName = prompt("Enter new product name:");
+            if (newName !== null && newName.trim() !== '') {
+                const products = loadProducts();
+                const product = products.find(p => p.id === productId);
+                product.name = newName.trim();
+                saveProducts(products);
+
+                document.getElementById(`name-${productId}`).textContent = product.name;
+                alert("Product name updated successfully!");
+            } else {
+                alert("Please enter a valid product name.");
+            }
+        });
+    }
+
+    // Edit stock for a specific product
+    function editStock(productId) {
+        validatePassword(function() {
+            const newStock = prompt("Enter new stock quantity:");
+            if (newStock !== null && !isNaN(newStock) && newStock >= 0) {
+                const products = loadProducts();
+                const product = products.find(p => p.id === productId);
+                product.available = parseInt(newStock);
+                saveProducts(products);
+
+                document.getElementById(`available-${productId}`).textContent = product.available;
+                alert("Stock updated successfully!");
+            } else {
+                alert("Please enter a valid stock quantity.");
+            }
+        });
+    }
+
+    // Edit price for a specific product
+    function editPrice(productId) {
+        validatePassword(function() {
+            const newPrice = prompt("Enter new price:");
+            if (newPrice !== null && !isNaN(newPrice) && newPrice > 0) {
+                const products = loadProducts();
+                const product = products.find(p => p.id === productId);
+                product.price = parseFloat(newPrice);
+                saveProducts(products);
+
+                document.getElementById(`price-${productId}`).textContent = product.price;
+                alert("Price updated successfully!");
+            } else {
+                alert("Please enter a valid price.");
+            }
+        });
+    }
+
+    // Add product to the shopping cart
+    function addToCart(productId) {
+        const quantityInput = document.getElementById(`quantity-${productId}`);
+        const quantity = parseInt(quantityInput.value);
+        
+        const products = loadProducts();
+        const product = products.find(p => p.id === productId);
+        
+        if (quantity > product.available) {
+            alert('Not enough stock available!');
+            return;
+        }
+
+	// Track the previous stock
+        previousStock[productId] = product.available;
+
+        product.available -= quantity; // DEDUCTKAN ANG STOCKS 
+        saveProducts(products);
+
+        document.getElementById(`available-${productId}`).textContent = product.available;
+
+        document.getElementById(`add-to-cart-${productId}`).disabled = true;
+
+        addToCartList(product, quantity);
+    }
+
+    // Add an item to the shopping cart list
+    function addToCartList(product, quantity) {
+        const cartList = document.getElementById('cartList');
+        const cartItem = document.createElement('li');
+        
+        cartItem.innerHTML = `\n${product.name} - ${quantity} x ₱${product.price} = ₱${product.price * quantity}.00`;
+        cartList.appendChild(cartItem);
+
+        updateCartTotal();
+    }
+
+// CANCEL ADD TO CART OPEN
+    function cancelAddToCart(productId) {
+        const products = loadProducts();
+        const product = products.find(p => p.id === productId);
+
+        // Restore the previous stock
+        if (previousStock[productId] !== undefined) {
+            product.available = previousStock[productId];
+            saveProducts(products);
+
+            // Update the UI to reflect the restored stock
+            document.getElementById(`available-${productId}`).textContent = product.available;
+            document.getElementById(`add-to-cart-${productId}`).disabled = false;
+
+            // Remove the previous cart item if added
+            const cartList = document.getElementById('cartList');
+            const cartItems = cartList.getElementsByTagName('li');
+            for (let item of cartItems) {
+                if (item.innerText.includes(product.name)) {
+                    cartList.removeChild(item);
+                }
+            }
+
+            updateCartTotal();
+        }
+    }
+// CANCEL ADD TO CART CLOSE
+
+
+
+
+
+    // Update the total cost of the cart
+    function updateCartTotal() {
+        const cartList = document.getElementById('cartList');
+        let total = 0;
+
+        const cartItems = cartList.getElementsByTagName('li');
+        for (let item of cartItems) {
+            const priceText = item.innerText;
+            const priceMatch = priceText.match(/=\s?\₱(\d+(\.\d{2})?)/);
+            if (priceMatch) {
+                total += parseFloat(priceMatch[1]);
             }
         }
 
-        function cancelFromCart(productId) {
-            const cancelButton = document.getElementById(`cancel-product-${productId}`);
-            const addToCartButton = document.getElementById(`btn-product-${productId}`);
+        document.getElementById('cartTotal').textContent = total.toFixed(2);
+    }
 
-            // Find and remove the product from the cart
-            const productIndex = cart.findIndex(item => item.id === productId);
-            if (productIndex !== -1) {
-                const product = cart[productIndex];
-                stocks[productId] += product.qty; // Restore stock
-                totalPrice -= product.price;
+    // Checkout function
+    function checkout1() {
+        const total = parseFloat(document.getElementById('cartTotal').textContent);//kani maoy copyon nga code para sa message
+        if (total <= 0) {
+            alert('Your cart is empty. Please add items before checking out.');
+            return;
+        }
+	 if (total > 0) {
+	allforms.style.display="block";
+        alert(`Your total amount is ₱${total.toFixed(2)}. Please fill-in the Yellow Form!`);
+			}
 
-                cart.splice(productIndex, 1); // Remove product from cart
+        const cartList = document.getElementById('cartList'); //kani maoy copyon nga code para sa message
+        cartList.innerHTML = '';
+        document.getElementById('cartTotal').textContent = '0.00';
 
-                updateStockUI(productId);
-                updateCartUI();
+        renderProducts();
+    }
 
-                addToCartButton.disabled = false; // Re-enable Add to Cart button
-                cancelButton.disabled = true; // Disable Cancel button
+
+    // Checkout function
+    function checkout() {
+        const total = parseFloat(document.getElementById('cartTotal').textContent);//kani maoy copyon nga code para sa message
+        if (total <= 0) {
+            alert('Your cart is empty. Please add items before checking out.');
+            return;
+        }
+	 if (total > 0) {
+	allforms.style.display="block";
+        alert(`Your total amount is ₱${total.toFixed(2)}. Please fill-in the Yellow Form!`);
+			}
+
+        renderProducts();
+    }
+
+
+
+
+
+function displayNumber() {//open
+            event.preventDefault(); // Prevent form submission
+            const numberInput1 = document.getElementById("numberInput1").value;
+            const numberInput2 = document.getElementById("numberInput2").value;
+            if (numberInput1.length === 11 && numberInput2.length === 11 && numberInput1 == numberInput2) {
+                document.getElementById("output").textContent = "We sent a Permanent Customer Code to your number " + numberInput1+". Please wait for a while.";
+            } else {
+                alert("Please enter exactly 11 digits.");
             }
-        }
+        }//close
 
-        function updateStockUI(productId) {
-            document.getElementById(`stock-product-${productId}`).textContent = stocks[productId];
-        }
 
-        function updateCartUI() {
-            const cartList = document.getElementById('cart-list');
-            cartList.innerHTML = ''; // Clear existing items
-            cart.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = `${item.name} - ₱${item.perprice} (x${item.qty}) - ₱${item.price.toFixed(2)}`;
-                cartList.appendChild(li);
-            });
-            document.getElementById('total-price').textContent = `Total: ₱${totalPrice.toFixed(2)}`;
-        }
+ // Checkout function
+    function cancelcart() {
+        alert(`Add to Cart List was cancelled.Your cart now is empty.`);
+	cartList.innerHTML = '';
+        document.getElementById('cartTotal').textContent = '0.00';
+        renderProducts();
+    }
 
-        function checkout() {
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
+
+
+
+    // Add new product function
+    function addNewProduct() {
+        validatePassword(function() {
+            const name = document.getElementById('newProductName').value;
+            const price = parseFloat(document.getElementById('newProductPrice').value);
+            const stock = parseInt(document.getElementById('newProductStock').value);
+            const image = document.getElementById('newProductImage').value;
+
+            if (!name || !price || !stock || !image) {
+                alert("All fields are required!");
                 return;
             }
-            alert('Checkout successful! Total: ₱' + totalPrice.toFixed(2));
-            cart = [];
-            totalPrice = 0;
-            updateCartUI();
 
-            // Re-enable all Add to Cart buttons and disable all Cancel buttons
-            for (let productId in stocks) {
-                document.getElementById(`btn-product-${productId}`).disabled = false;
-                document.getElementById(`cancel-product-${productId}`).disabled = true;
+            const newProduct = {
+                id: Date.now(),
+                name: name,
+                price: price,
+                available: stock,
+                image: image
+            };
+
+            const products = loadProducts();
+            products.push(newProduct);
+            saveProducts(products);
+
+            renderProducts();
+        });
+    }
+
+    // Initialize the store on page load
+    function init() {
+        renderProducts();
+    }
+
+    // Run the initialization function
+    init();
+
+
+
+
+
+
+    // Edit stock for a specific product open 
+    function addproduct1() {
+        validatePassword(function() {
+            addproduct.style.display="block";
+                    });
+    }
+    // Edit stock for a specific product close
+
+
+   // display buttonset1 open 
+    function displayset1() {
+        validatePassword(function() {
+            buttonset1.style.display="block";
+		
+	div1.style.display="block";
+	div2.style.display="block";
+	div3.style.display="block";
+
+                    });
+    }
+    // display buttonset1 close
+
+
+//hide add product form open
+function hideform1(){
+addproduct.style.display="none";
+}
+//hide add product form close
+
+
+//hide buttonset1 open
+function hideset1(){
+buttonset1.style.display="none";
+	div1.style.display="none";
+	div2.style.display="none";
+	div3.style.display="none";
+
+}
+//hide buttonset1 close
+
+
+
+// TELEGRAM BOT OPEN mobile number
+async function sendMessage(event) {//open
+            event.preventDefault(); // Prevent the form from refreshing the page
+
+            const chatId = '5208891145'; // Replace with your chat ID
+            const botToken = '7870251548:AAGRB3mWjbj0NMmhZ_PsBxWXV0O13UMuWy8'; // Replace with your bot token
+
+            // Collect the form data
+
+		
+            const name = document.getElementById('name').value;
+	const name1 = name.toUpperCase();
+
+	    const numberInput1 = document.getElementById("numberInput1").value;
+            const numberInput2 = document.getElementById("numberInput2").value;
+
+	const num1 = Math.floor(Math.random() * 10); // random number (digit 1)
+	const num2 = Math.floor(Math.random() * 10); // random number (digit 2)
+	const num3 = Math.floor(Math.random() * 10); // random number (digit 3)
+	const num4 = Math.floor(Math.random() * 10); // random number (digit 4)
+ 
+            //const message = document.getElementById('message').value;
+
+
+		//const itemko = `"your data here."`; //JSON.stringify(cart);
+		//const totalko = JSON.stringify(cartTotal);
+		//const totalko ="₱"+ parseFloat(document.getElementById('cartTotal').textContent)+".00";
+		//const itemko = document.getElementById('cartList').textContent;
+
+if (numberInput1.length === 11 && numberInput2.length === 11 && numberInput1 == numberInput2 && name1 !=="") {//open condition1
+                document.getElementById("output").textContent = "We sent a Permanent Customer Code to your number " + numberInput1+". Please wait for a while.";
+document.getElementById('mybutton2').disabled = true;
+
+            // Format the message
+            const text = `From:One Click Store\nTo:${numberInput1} \nName:${name1} \nPermanent Customer Code:${num1}${num2}${num3}${num4} \n`;
+
+            // Send the message using Telegram Bot API
+            const url = `https://api.telegram.org/bot7870251548:AAGRB3mWjbj0NMmhZ_PsBxWXV0O13UMuWy8/sendMessage?chat_id=5208891145&text=${encodeURIComponent(text)}`;
+
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                } else {
+                    alert('Failed to send message.');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
             }
-        }
-    </script>
+		}//close condition1
+
+if(numberInput1 !== numberInput2 || numberInput1.length !==11 || numberInput2.length !==11 ) {
+                alert("Please enter exactly the same number with 11 digits.");
+     }
+
+if(name1 == "") {
+                alert("Please enter your complete name.");
+     }
+
+
+        }//close
+
+// TELEGRAM BOT CLOSE mobile number
+
+
+// TELEGRAM BOT OPEN 2
+async function sendMessage2(event) {//open
+            event.preventDefault(); // Prevent the form from refreshing the page
+
+            const chatId = '5208891145'; // Replace with your chat ID
+            const botToken = '7870251548:AAGRB3mWjbj0NMmhZ_PsBxWXV0O13UMuWy8'; // Replace with your bot token
+
+            // Collect the form data
+
+		
+            const name2 = document.getElementById('name2').value;
+	    const name12 = name2.toUpperCase();
+	    const address = document.getElementById('address').value;
+	    const address2 = address.toUpperCase();
+
+	    const numberInput12 = document.getElementById("numberInput12").value;
+	    const first3digit = numberInput12.slice(0,3);
+	    const last4digit = numberInput12.slice(-4);
+
+            const numberInput22 = document.getElementById("numberInput22").value;
+	    const numberInput3 = document.getElementById("numberInput3").value;
+
+	//const random1 = Math.floor(Math.random() * 26); // random number (digit 1)
+	//const random2 = Math.floor(Math.random() * 26); // random number (digit 2)
+
+	//const ray1 = [A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z];
+	//const letter1=ray1[random1];
+	//const letter2=ray1[random2];
+
+	const num12 = Math.floor(Math.random() * 10); // random number (digit 1)
+	const num22 = Math.floor(Math.random() * 10); // random number (digit 2)
+	const num32 = Math.floor(Math.random() * 10); // random number (digit 3)
+	const num42 = Math.floor(Math.random() * 10); // random number (digit 4)
+	const num52 = Math.floor(Math.random() * 10); // random number (digit 1)
+	const num62 = Math.floor(Math.random() * 10); // random number (digit 2)
+
+            const trace = `${num12}${num22}${num32}${num42}${num52}${num62}`; 
+ 
+            //const message = document.getElementById('message').value;
+
+
+		//const itemko = `"your data here."`; //JSON.stringify(cart);
+		//const totalko = JSON.stringify(cartTotal);
+		const totalko ="₱"+ parseFloat(document.getElementById('cartTotal').textContent)+".00";
+		const itemko = document.getElementById('cartList').textContent;
+		//const trace1 = `${letter1}${letter2}${num12}${num22}${num32}${num42}${num52}${num62}`;
+
+if(!name2 || !address || !numberInput3){
+		alert('Please provide all the needed details.');
+		}
+if(numberInput12 !== numberInput22) {
+                alert("Mobile numbers did not matched.");
+     }
+if (numberInput12.length === 11 && numberInput22.length === 11 && numberInput12 == numberInput22 && name2 !=="" && address !=="" && numberInput3 !== "") {//open condition1
+                document.getElementById("output2").textContent = "We are now packing your order.We will sent you the date of delivery. " + "Please wait for a while.";
+document.getElementById('mybutton').disabled = true;
+
+            // Format the message to telegram
+            const text = `From:One Click Store\nTo:${first3digit}****${last4digit} \nName:${name12}\nAddress:${address2}\nOrder ID:${trace}\n${itemko}\n\nTotal Amount: ${totalko}\n\nReceiver:${numberInput12}`;
+
+            // Send the message using Telegram Bot API
+            const url = `https://api.telegram.org/bot7870251548:AAGRB3mWjbj0NMmhZ_PsBxWXV0O13UMuWy8/sendMessage?chat_id=5208891145&text=${encodeURIComponent(text)}`;
+
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                } else {
+                    alert('Failed to send message.');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+		}//close condition1
+
+//else {
+                //alert("Please enter exactly the same mobile number with 11 digits.");
+    // }
+
+
+        }//close
+
+// TELEGRAM BOT CLOSE 2
+
+
+
+
+
+</script>
+
 </body>
 </html>
